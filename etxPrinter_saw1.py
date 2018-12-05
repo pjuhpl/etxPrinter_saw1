@@ -65,7 +65,8 @@ def on_release(key):
                 for i in range(linesEtk):  
                     print(lines[i])
                     fileEtklog.write(lines[i] + '\n')
-                    fileEtklog.write(str(datetime.datetime.now()) + '\n')
+                    if i == 4:
+                        fileEtklog.write(str(datetime.datetime.now()) + '\n')
                     fileEtk = open(dirfileEtk + plikEt, 'w') 
                     for i in range(linesEtk,(len(lines))):
                         if i < len(lines)-1:
