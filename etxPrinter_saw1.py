@@ -10,15 +10,15 @@ import os
 import time
 import datetime
 
-dirfileCun='C:/emmegi/STAR/LDT/'
-dirfileEtk='Z:/emmegifdd/ETX/'
-dirfileEtklog='Z:/emmegifdd/ETX/log.txt'
-dirfileTmp='Z:/emmegifdd/ETX/TMP.rtf'
+#dirfileCun='C:/emmegi/STAR/LDT/'
+#dirfileEtk='Z:/emmegifdd/ETX/'
+#dirfileEtklog='Z:/emmegifdd/ETX/log/'
+#dirfileTmp='Z:/emmegifdd/ETX/tmp/TMP.rtf'
 
-#dirfileCun='D:/PJU/drukarka/CUN/'
-#dirfileEtk='D:/PJU/drukarka/ET/'
-#dirfileEtklog='D:/PJU/drukarka/ET/log.txt'
-#dirfileTmp='D:/PJU/drukarka/ET/TMP.rtf'
+dirfileCun='D:/PJU/drukarka/CUN/'
+dirfileEtk='D:/PJU/drukarka/ET/'
+dirfileEtklog='D:/PJU/drukarka/ET/log/'
+dirfileTmp='D:/PJU/drukarka/ET/tmp/TMP.rtf'
 
 linesEtk=5
 drukuj = ''
@@ -59,13 +59,13 @@ def on_release(key):
         if os.path.isfile(dirfileEtk + plikEt):
             fileEtk = open(dirfileEtk + plikEt, 'r').read()
             lines = fileEtk.split('\n') 
-            fileEtklog = open(dirfileEtklog, 'a')
+            fileEtklog = open(dirfileEtklog + pliki[v][0:len(pliki[v])-4] + '.log', 'a')
             
             if len(lines)>1: 
                 for i in range(linesEtk):  
                     print(lines[i])
                     fileEtklog.write(lines[i] + '\n')
-                    if i == 4:
+                    if i==4:
                         fileEtklog.write(str(datetime.datetime.now()) + '\n')
                     fileEtk = open(dirfileEtk + plikEt, 'w') 
                     for i in range(linesEtk,(len(lines))):
@@ -81,15 +81,22 @@ def on_release(key):
                     fileTmp.write('\\viewkind4\\uc1 \n\\pard\\sa200\\sl276\\slmult1\\f0\\fs22 ')
                     for k in range(linesEtk):
                         if k==0:
-                            fileTmp.write(lines[k] + '\\line ')
+                            fileTmp.write(lines[k] + '\\line\\fs28 ')
                         if k==1:
                             fileTmp.write(lines[k] + '\\line\\f1\\fs36 *')
                         if k==2:
-                            fileTmp.write(lines[k] + '*\\f2\\fs22\\line ')
+                            if lines[3][len(lines[3])-3:len(lines[3])] == 'CNC' :
+                                fileTmp.write(lines[k] + '*\\f2  ' + lines[3][len(lines[3])-3:len(lines[3])] + '\\fs22\\line ')
+                            else:
+                                fileTmp.write(lines[k] + '*\\f2\\fs22\\line ')
                         if k==3:
-                            fileTmp.write(lines[k] + '\\line ')
+                            if lines[3][len(lines[3])-3:len(lines[3])] == 'CNC' :
+                                fileTmp.write(lines[k][0:len(lines[k])-4] + '\\line\\b\\fs28 ')
+                            else:
+                                fileTmp.write(lines[k] + '\\line\\b\\fs28 ')
                         if k==4:
-                            fileTmp.write(lines[k] + '\\lang21\\par}')  
+                            wymiar = lines[k].split(';')
+                            fileTmp.write(wymiar[0] + '\\b0\\fs22          ' + wymiar[1] + '  ;  ' + wymiar[2] + '\\lang21\\par}')  
                 
                 os.startfile(dirfileTmp, "print")
                 fileEtk.close()    
